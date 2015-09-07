@@ -86,5 +86,12 @@
             <version>7.0</version>
         </dependency>
         <!-- end dbpool-->
+        <!--sybase jdbc-->
+         <dependency>
+            <groupId>jconn</groupId>
+            <artifactId>jconn</artifactId>
+            <version>4</version>
+        </dependency>
+        <!-- end sybase jdbc -->
     </dependencies>
 </project>

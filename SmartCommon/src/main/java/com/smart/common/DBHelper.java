@@ -974,6 +974,48 @@ public class DBHelper {
     }
 
     /**
+     * 使用完成后，注意清理 map，避免内存泄漏 cleanMapTDString
+     *
+     * @param rsid
+     * @param sqlStr
+     * @return
+     * @throws Exception
+     */
+    public static Map<String, String> ExecuteSqlSelectReturnMap(String rsid, String sqlStr) throws Exception {
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet result = null;
+        try {
+            conn = DBHelper.ConnectSybase(rsid);
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(sqlStr);
+            ResultSetMetaData rsmd = result.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+
+            Map<String, String> rowMap = null;
+
+            while (result.next()) {
+                rowMap = new HashMap<>();
+                for (int j = 1; j <= columnCount; j++) {
+//                    rowMap.put(rsmd.getColumnName(j), result.getString(rsmd.getColumnName(j)));
+                    rowMap.put(rsmd.getColumnLabel(j), result.getString(j));
+
+                }
+            }
+            rsmd = null;
+            result.close();
+            return rowMap;
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            RSLogger.ErrorLogInfo("ExecuteSqlSelectReturnMap ExecuteSqlSelect err sql:" + sqlStr + "exception.msg" + e.getLocalizedMessage(), e);
+            throw new Exception("ExecuteSqlSelectReturnMap ExecuteSqlSelect err sql:" + sqlStr + "exception.msg" + e.getLocalizedMessage());
+
+        } finally {
+            DBHelper.CloseConnection(result, stmt, conn);
+        }
+    }
+
+    /**
      * 执行sql语句查询
      *
      * @param rsid
