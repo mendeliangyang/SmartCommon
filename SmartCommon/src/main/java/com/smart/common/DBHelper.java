@@ -15,6 +15,7 @@ import com.smart.common.model.TableDetailModel;
 import com.smart.common.model.SystemSetModel;
 import com.smart.common.model.TableInfoModel;
 import java.sql.*; // JDBC
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -981,7 +982,7 @@ public class DBHelper {
      * @return
      * @throws Exception
      */
-    public static Map<String, String> ExecuteSqlSelectReturnMap(String rsid, String sqlStr) throws Exception {
+    public static List<Map<String, String>> ExecuteSqlSelectReturnMap(String rsid, String sqlStr) throws Exception {
         Connection conn = null;
         Statement stmt = null;
         ResultSet result = null;
@@ -991,20 +992,19 @@ public class DBHelper {
             result = stmt.executeQuery(sqlStr);
             ResultSetMetaData rsmd = result.getMetaData();
             int columnCount = rsmd.getColumnCount();
-
+            List<Map<String, String>> map = new ArrayList<>();
             Map<String, String> rowMap = null;
-
             while (result.next()) {
                 rowMap = new HashMap<>();
                 for (int j = 1; j <= columnCount; j++) {
 //                    rowMap.put(rsmd.getColumnName(j), result.getString(rsmd.getColumnName(j)));
                     rowMap.put(rsmd.getColumnLabel(j), result.getString(j));
-
                 }
+                map.add(rowMap);
             }
             rsmd = null;
             result.close();
-            return rowMap;
+            return map;
         } catch (SQLException e) {
             //e.printStackTrace();
             RSLogger.ErrorLogInfo("ExecuteSqlSelectReturnMap ExecuteSqlSelect err sql:" + sqlStr + "exception.msg" + e.getLocalizedMessage(), e);
