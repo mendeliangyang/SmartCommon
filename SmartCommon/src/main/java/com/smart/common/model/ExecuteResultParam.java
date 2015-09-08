@@ -7,6 +7,7 @@ package com.smart.common.model;
 
 import com.smart.common.DeployInfo;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -44,6 +45,16 @@ public class ExecuteResultParam {
         for (Iterator<String> iterator = resultMap.keySet().iterator(); iterator.hasNext();) {
             String next = iterator.next();
             array.add(JSONObject.fromObject(resultMap.get(next)));
+        }
+        JSONObject obj = new JSONObject();
+        obj.accumulate(DeployInfo.ResultDataTag, array);
+        this.ResultJsonObject = obj;
+    }
+
+    public ExecuteResultParam(List<Map<String, String>> resultMap, boolean isArray) {
+        JSONArray array = new JSONArray();
+        for (Map<String, String> resultMap1 : resultMap) {
+            array.add(JSONObject.fromObject(resultMap1));
         }
         JSONObject obj = new JSONObject();
         obj.accumulate(DeployInfo.ResultDataTag, array);
