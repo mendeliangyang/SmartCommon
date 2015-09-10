@@ -7,7 +7,7 @@ package com.smart.common.model;
 
 public enum ResponseResultCode {
 
-    Error("1000"), Success("0000"), ErrorUserOrPwd("1001"), ErrorSignToken("1002"), ErrorUserName("1003"), ErrorExistAccount("1004"), ErrorExistUser("1005");
+    Error("1000"), Success("0000"), ErrorUserOrPwd("1001"), ErrorSignToken("1002"), ErrorUserName("1003"), ErrorExistAccount("1004"), ErrorExistUser("1005"), ErrorUnExistAccount("1006"), ErrorExistAccountBind("1007");
 
     private String describe;
 
