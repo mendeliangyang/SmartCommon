@@ -61,6 +61,17 @@ public class ExecuteResultParam {
         this.ResultJsonObject = obj;
     }
 
+    public ExecuteResultParam(List<Map<String, String>> resultMap, String rowsCount, boolean isArray) {
+        JSONArray array = new JSONArray();
+        for (Map<String, String> resultMap1 : resultMap) {
+            array.add(JSONObject.fromObject(resultMap1));
+        }
+        JSONObject obj = new JSONObject();
+        obj.accumulate(DeployInfo.ResultDataTag, array);
+        obj.accumulate("rowsCount", rowsCount);
+        this.ResultJsonObject = obj;
+    }
+
     public ExecuteResultParam(String pErrMsg, String pExecuteStr) {
         this.errMsg = pErrMsg;
         this.executeStr = pExecuteStr;

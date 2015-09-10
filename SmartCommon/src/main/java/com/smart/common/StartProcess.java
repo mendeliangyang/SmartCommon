@@ -15,9 +15,14 @@ import javax.servlet.ServletContextListener;
  */
 public class StartProcess implements ServletContextListener {
 
+    private boolean isLoad = false;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("init");
+        if (isLoad) {
+            return;
+        }
 
 //        ServletContext sc = sce.getServletContext();//由事件得到servletcontext
 //        String name = sc.getInitParameter("RootPath");//通过参数获取ServletContext的value
@@ -57,6 +62,7 @@ public class StartProcess implements ServletContextListener {
             RSLogger.SetUpLogInfo(String.format("start service error step readDBInformation,%s", e.getLocalizedMessage()));
             RSLogger.ErrorLogInfo(String.format("start service error step readDBInformation,%s", e.getLocalizedMessage()), e);
         }
+        isLoad = true;
 //        try {
 //            AssignTrial.initialWebSocketService();
 //        } catch (Exception e) {

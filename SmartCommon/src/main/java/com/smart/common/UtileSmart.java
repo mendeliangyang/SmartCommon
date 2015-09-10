@@ -129,11 +129,31 @@ public class UtileSmart {
         return getObjectFromMap(map, key, true).toString();
     }
 
+    public static int getIntFromMap(Map<String, Object> map, String key) throws Exception {
+        return Integer.parseInt(getObjectFromMap(map, key, true).toString());
+    }
+
+    public static int tryGetIntFromMap(Map<String, Object> map, String key) throws Exception {
+        try {
+            Object temp = getObjectFromMap(map, key, false);
+            if (temp == null) {
+                return 0;
+            }
+            return Integer.parseInt(temp.toString());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
 //    public static Object[] getListFromMap(Map<String, Object> map, String key) throws Exception {
 //        return (Object[]) getObjectFromMap(map, key, true);
 //    }
+
     public static String tryGetStringFromMap(Map<String, Object> map, String key) throws Exception {
-        return getObjectFromMap(map, key, false).toString();
+        Object temp = getObjectFromMap(map, key, false);
+        if (temp == null) {
+            return null;
+        }
+        return temp.toString();
     }
 
 //    public static Object[] tryGetListFromMap(Map<String, Object> map, String key) throws Exception {
