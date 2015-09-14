@@ -40,32 +40,36 @@ public class DBHelper {
         ConnectionPool tempCp = null;
         StringBuffer temp = new StringBuffer();
         Set<SystemSetModel> systemSet = DeployInfo.GetSystemSets();
-
+        //register sybase jdbc
         Class c = Class.forName("com.sybase.jdbc3.jdbc.SybDriver");  // Fill JDBC driver class name here.
         Driver driver = (Driver) c.newInstance();
         DriverManager.registerDriver(driver);
+        //register mssql jdbc
+        c = Class.forName("net.sourceforge.jtds.jdbc.Driver");
+        driver = (Driver) c.newInstance();
+        DriverManager.registerDriver(driver);
+        //initial dbpool
         for (SystemSetModel tempSystemSet : systemSet) {
-//            if (tempSystemSet.id.equals("ElectornicBank") || tempSystemSet.id.equals("microCredit")) {
-            temp.delete(0, temp.length());
-            // Use the Sybase jConnect driver...
-            temp.append("jdbc:sybase:Tds:");
-            // to connect to the supplied machine name...
-            temp.append(tempSystemSet.dbAddress);
-            // on the default port number for ASA...
-            temp.append(":");
-            temp.append(tempSystemSet.dbPort);
-            temp.append("/");
-            //temp.append(":5000/");
-            temp.append(tempSystemSet.dbName);
-            temp.append("?ServiceName=");
-            temp.append(tempSystemSet.dbName);
-            //temp.append("?language=us_english&charset=cp936");
-            // 1:pool-name,2:min,3:max,4:size,5:timeout,6:url,7:name,8:passwd
-            tempCp = new ConnectionPool(tempSystemSet.id, 5, 5, 6, ConnectionPoolTimeout, temp.toString(), tempSystemSet.dbUser, tempSystemSet.dbPwd);
-            tempCp.setAsyncDestroy(true);
-            tempCp.setCaching(false);
-            mapConnectionPool.put(tempSystemSet.id, tempCp);
-//            }
+            if (tempSystemSet.dbType.toLowerCase().equals("sybase")) {
+                temp.delete(0, temp.length());
+                // Use the Sybase jConnect driver...
+                // to connect to the supplied machine name...
+                temp.append("jdbc:sybase:Tds:").append(tempSystemSet.dbAddress).append(":").append(tempSystemSet.dbPort).append("/").append(tempSystemSet.dbName).append("?ServiceName=").append(tempSystemSet.dbName);
+                //temp.append("?language=us_english&charset=cp936");
+                // 1:pool-name,2:min,3:max,4:size,5:timeout,6:url,7:name,8:passwd
+                tempCp = new ConnectionPool(tempSystemSet.id, 5, 5, 6, ConnectionPoolTimeout, temp.toString(), tempSystemSet.dbUser, tempSystemSet.dbPwd);
+                tempCp.setAsyncDestroy(true);
+                tempCp.setCaching(false);
+                mapConnectionPool.put(tempSystemSet.id, tempCp);
+            } else if (tempSystemSet.dbType.toLowerCase().equals("mssql")) {
+                temp.delete(0, temp.length());
+                temp.append("jdbc:jtds:sqlserver://").append(tempSystemSet.dbAddress).append(":").append(tempSystemSet.dbPort).append("/").append(tempSystemSet.dbName).append(";instance=SQLEXPRESS");
+                tempCp = new ConnectionPool(tempSystemSet.id, 5, 5, ConnectionPoolTimeout, temp.toString(), tempSystemSet.dbUser, tempSystemSet.dbPwd);
+                tempCp.setAsyncDestroy(true);
+                tempCp.setCaching(false);
+                mapConnectionPool.put(tempSystemSet.id, tempCp);
+            }
+
         }
         return true;
     }
