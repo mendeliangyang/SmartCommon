@@ -48,6 +48,11 @@ public class DBHelper {
         c = Class.forName("net.sourceforge.jtds.jdbc.Driver");
         driver = (Driver) c.newInstance();
         DriverManager.registerDriver(driver);
+        //register mysql jdbc
+        c = Class.forName("com.mysql.jdbc.Driver");
+        driver = (Driver) c.newInstance();
+        DriverManager.registerDriver(driver);
+
         //initial dbpool
         for (SystemSetModel tempSystemSet : systemSet) {
             if (tempSystemSet.dbType.toLowerCase().equals("sybase")) {
@@ -63,7 +68,14 @@ public class DBHelper {
                 mapConnectionPool.put(tempSystemSet.id, tempCp);
             } else if (tempSystemSet.dbType.toLowerCase().equals("mssql")) {
                 temp.delete(0, temp.length());
-                temp.append("jdbc:jtds:sqlserver://").append(tempSystemSet.dbAddress).append(":").append(tempSystemSet.dbPort).append("/").append(tempSystemSet.dbName).append(";instance=SQLEXPRESS");
+                temp.append("jdbc:jtds:sqlserver://").append(tempSystemSet.dbAddress).append(":").append(tempSystemSet.dbPort).append("/").append(tempSystemSet.dbName).append("?");
+                tempCp = new ConnectionPool(tempSystemSet.id, 5, 5, ConnectionPoolTimeout, temp.toString(), tempSystemSet.dbUser, tempSystemSet.dbPwd);
+                tempCp.setAsyncDestroy(true);
+                tempCp.setCaching(false);
+                mapConnectionPool.put(tempSystemSet.id, tempCp);
+            } else if (tempSystemSet.dbType.toLowerCase().equals("mysql")) {
+                temp.delete(0, temp.length());
+                temp.append("jdbc:mysql://").append(tempSystemSet.dbAddress).append(":").append(tempSystemSet.dbPort).append("/").append(tempSystemSet.dbName).append("?").append("useicode=true&characterEncoding=UTF8");
                 tempCp = new ConnectionPool(tempSystemSet.id, 5, 5, ConnectionPoolTimeout, temp.toString(), tempSystemSet.dbUser, tempSystemSet.dbPwd);
                 tempCp.setAsyncDestroy(true);
                 tempCp.setCaching(false);
