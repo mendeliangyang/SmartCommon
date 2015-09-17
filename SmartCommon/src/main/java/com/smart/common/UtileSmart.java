@@ -5,6 +5,7 @@
  */
 package com.smart.common;
 
+import com.smart.common.model.SmartDecodingEnum;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,14 +64,14 @@ public class UtileSmart {
 
     }
 
-    public static String readFile(String path, String encoding) throws Exception {
+    public static String readFile(String path, SmartDecodingEnum encoding) throws Exception {
         StringBuffer sb = new StringBuffer();
         String tempString = null;
         File file = null;
         BufferedReader reader = null;
         try {
 
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path)), encoding));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path)), encoding.toString()));
             while ((tempString = reader.readLine()) != null) {
                 sb.append(tempString);
             }
@@ -92,11 +93,11 @@ public class UtileSmart {
         }
     }
 
-    public static void writeFile(String path, String strContext, String decoding) throws Exception {
+    public static void writeFile(String path, String strContext, SmartDecodingEnum decoding) throws Exception {
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(new File(path));
-            out.write(strContext.getBytes());
+            out.write(strContext.getBytes(decoding.toString()));
             out.close();
         } catch (FileNotFoundException ex) {
             RSLogger.ErrorLogInfo("write file error file not found." + ex.getLocalizedMessage(), ex);

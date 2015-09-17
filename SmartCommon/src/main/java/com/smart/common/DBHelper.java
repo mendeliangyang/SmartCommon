@@ -68,7 +68,7 @@ public class DBHelper {
                 mapConnectionPool.put(tempSystemSet.id, tempCp);
             } else if (tempSystemSet.dbType.toLowerCase().equals("mssql")) {
                 temp.delete(0, temp.length());
-                temp.append("jdbc:jtds:sqlserver://").append(tempSystemSet.dbAddress).append(":").append(tempSystemSet.dbPort).append("/").append(tempSystemSet.dbName).append("?");
+                temp.append("jdbc:jtds:sqlserver://").append(tempSystemSet.dbAddress).append(":").append(tempSystemSet.dbPort).append("/").append(tempSystemSet.dbName).append(";instance=SQLEXPRESS");
                 tempCp = new ConnectionPool(tempSystemSet.id, 5, 5, ConnectionPoolTimeout, temp.toString(), tempSystemSet.dbUser, tempSystemSet.dbPwd);
                 tempCp.setAsyncDestroy(true);
                 tempCp.setCaching(false);
