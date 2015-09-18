@@ -252,18 +252,18 @@ public class UtileSmart {
      *
      * @param jsonObj
      * @param strParam
-     * @param isException 没有 strParam 属性，true引发异常，false返回null
      * @return
      * @throws Exception
      */
-    public static String GetJsonString(JSONObject jsonObj, String strParam, boolean isException) throws Exception {
-        if (jsonObj.containsKey(strParam)) {
-            return jsonObj.getString(strParam);
-        }
-        if (isException) {
-            throw new Exception("jsonObject There is no " + strParam);
-        }
-        return null;
+    public static String GetJsonString(JSONObject jsonObj, String strParam) throws Exception {
+        return jsonObj.getString(strParam);
+//        if (jsonObj.containsKey(strParam)) {
+//            return jsonObj.getString(strParam);
+//        }
+//        if (isException) {
+//            throw new Exception("jsonObject There is no " + strParam);
+//        }
+//        return null;
     }
 
     /**
@@ -272,9 +272,9 @@ public class UtileSmart {
      * @param strParam
      * @return 没有 strParam 属性返回null
      */
-    public static String GetJsonString(JSONObject jsonObj, String strParam) {
+    public static String TryGetJsonString(JSONObject jsonObj, String strParam) {
         try {
-            return GetJsonString(jsonObj, strParam, false);
+            return GetJsonString(jsonObj, strParam);
         } catch (Exception ex) {
             RSLogger.ErrorLogInfo(String.format("UtileSmart: GetJsonString error:%s", ex.getLocalizedMessage()), ex);
         }
