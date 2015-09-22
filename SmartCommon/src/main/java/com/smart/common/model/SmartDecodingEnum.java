@@ -11,7 +11,7 @@ package com.smart.common.model;
  */
 public enum SmartDecodingEnum {
 
-    utf8("UTF-8"), gbk("GBK"), gb2312("gb2312");
+    utf8("UTF-8"), gbk("GBK"), gb2312("gb2312"), ascii("ASCII");
 
     private String describe;
 

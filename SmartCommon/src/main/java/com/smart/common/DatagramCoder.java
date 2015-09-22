@@ -5,6 +5,7 @@
  */
 package com.smart.common;
 
+import com.smart.common.model.SmartDecodingEnum;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -16,16 +17,15 @@ import java.nio.charset.Charset;
  */
 public class DatagramCoder {
 
-    static String DefaultCharset = "ASCII";
-    
-    
-    public static byte[] strHex16ToByte(String strHex16){
-        if (strHex16.isEmpty()||strHex16.length()%2!=0) {
+    static String DefaultCharset = SmartDecodingEnum.ascii.toString();
+
+    public static byte[] strHex16ToByte(String strHex16) {
+        if (strHex16.isEmpty() || strHex16.length() % 2 != 0) {
             return null;
         }
-        byte[] bRet = new byte[strHex16.length()/2];
-        for (int i = 0,j=0; i < bRet.length; i++,j+=2) {
-            bRet[i] = (byte) Integer.parseInt(strHex16.substring(j,2),16);
+        byte[] bRet = new byte[strHex16.length() / 2];
+        for (int i = 0, j = 0; i < bRet.length; i++, j += 2) {
+            bRet[i] = (byte) Integer.parseInt(strHex16.substring(j, 2), 16);
         }
         return bRet;
     }
@@ -90,13 +90,13 @@ public class DatagramCoder {
         }
         return byteResult;
     }
-    
-    public static String padRight(String strSource,int iSize){
-        return padRight(strSource,iSize,'0');
+
+    public static String padRight(String strSource, int iSize) {
+        return padRight(strSource, iSize, '0');
     }
-    
-    public static String padRight(String strSource,int size,char cFill){
-         if (strSource.length() == size) {
+
+    public static String padRight(String strSource, int size, char cFill) {
+        if (strSource.length() == size) {
             return strSource;
         }
         int iLack = size - strSource.length();
@@ -112,7 +112,7 @@ public class DatagramCoder {
     }
 
     public static byte[] padRight(byte[] byteSource, int iSize) {
-        return DatagramCoder.padRight(byteSource, iSize, (byte)0x00);
+        return DatagramCoder.padRight(byteSource, iSize, (byte) 0x00);
     }
 
     public static byte[] padRight(byte[] byteSource, int size, byte byteFill) {
