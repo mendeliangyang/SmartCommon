@@ -105,7 +105,7 @@ public class DatagramCoder {
         }
         StringBuffer sbStr = new StringBuffer();
         sbStr.append(strSource);
-        for (int i = iLack; i > size; i--) {
+        for (int i = iLack; i > 0; i--) {
             sbStr.append(cFill);
         }
         return sbStr.toString();

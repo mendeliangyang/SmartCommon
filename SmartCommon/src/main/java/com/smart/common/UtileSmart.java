@@ -202,17 +202,29 @@ public class UtileSmart {
         return df.format(new Date());
     }
 
+    /**
+     * *
+     * 获取当前系统时间字符串 yyyyMMdd
+     *
+     * @param format yyyyMMdd
+     * @return
+     */
+    public static String getCurrentDate(String format) {
+        SimpleDateFormat df = new SimpleDateFormat(format);//设置日期格式
+        return df.format(new Date());
+    }
+
     public static String getUUID() {
         return UUID.randomUUID().toString();
     }
 
     /**
      * *
-     * 获取当前系统时间字符串 yyyyMMddHH
+     * 获取当前系统时间字符串 HHmmss getCurrentDateShortTime 改名 getCurrentTime
      *
      * @return
      */
-    public static String getCurrentDateShortTime() {
+    public static String getCurrentTime() {
         SimpleDateFormat df = new SimpleDateFormat("HHmmss");//设置日期格式
         return df.format(new Date());
     }
