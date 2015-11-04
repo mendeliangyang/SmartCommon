@@ -14,8 +14,143 @@ import java.util.Set;
  */
 public class ReviveRSParamModel {
 
-    public String token;//登录凭证
+    public String getToken() {
+        return token;
+    }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getRsid() {
+        return rsid;
+    }
+
+    public void setRsid(String rsid) {
+        this.rsid = rsid;
+    }
+
+    public String getHandle() {
+        return handle;
+    }
+
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
+
+    public String getDb_tableName() {
+        return db_tableName;
+    }
+
+    public void setDb_tableName(String db_tableName) {
+        this.db_tableName = db_tableName;
+    }
+
+    public String getPkValue() {
+        return pkValue;
+    }
+
+    public void setPkValue(String pkValue) {
+        this.pkValue = pkValue;
+    }
+
+    public Map<String, String> getPkValues() {
+        return pkValues;
+    }
+
+    public void setPkValues(Map<String, String> pkValues) {
+        this.pkValues = pkValues;
+    }
+
+    public String getFileColumn() {
+        return fileColumn;
+    }
+
+    public void setFileColumn(String fileColumn) {
+        this.fileColumn = fileColumn;
+    }
+
+    public String getSql() {
+        return sql;
+    }
+
+    public void setSql(String sql) {
+        this.sql = sql;
+    }
+
+    public short getDb_pageSize() {
+        return db_pageSize;
+    }
+
+    public void setDb_pageSize(short db_pageSize) {
+        this.db_pageSize = db_pageSize;
+    }
+
+    public int getDb_pageNum() {
+        return db_pageNum;
+    }
+
+    public void setDb_pageNum(int db_pageNum) {
+        this.db_pageNum = db_pageNum;
+    }
+
+    public int getDb_skipNum() {
+        return db_skipNum;
+    }
+
+    public void setDb_skipNum(int db_skipNum) {
+        this.db_skipNum = db_skipNum;
+    }
+
+    public short getDb_topNum() {
+        return db_topNum;
+    }
+
+    public void setDb_topNum(short db_topNum) {
+        this.db_topNum = db_topNum;
+    }
+
+    public String getDb_orderBy() {
+        return db_orderBy;
+    }
+
+    public void setDb_orderBy(String db_orderBy) {
+        this.db_orderBy = db_orderBy;
+    }
+
+    public Set<String> getDb_columns() {
+        return db_columns;
+    }
+
+    public void setDb_columns(Set<String> db_columns) {
+        this.db_columns = db_columns;
+    }
+
+    public Set<String> getDb_RULcolumns() {
+        return db_RULcolumns;
+    }
+
+    public void setDb_RULcolumns(Set<String> db_RULcolumns) {
+        this.db_RULcolumns = db_RULcolumns;
+    }
+
+    public Map<String, String> getDb_valueColumns() {
+        return db_valueColumns;
+    }
+
+    public void setDb_valueColumns(Map<String, String> db_valueColumns) {
+        this.db_valueColumns = db_valueColumns;
+    }
+
+    public Map<String, String> getDb_valueFilter() {
+        return db_valueFilter;
+    }
+
+    public void setDb_valueFilter(Map<String, String> db_valueFilter) {
+        this.db_valueFilter = db_valueFilter;
+    }
+    
+    public String token;//登录凭证
     public String rsid; //rsid
     public String handle; //base64 或者上传，指定 数据 insert，或者update
     public String db_tableName; //需要操作的表名称
@@ -49,12 +184,12 @@ public class ReviveRSParamModel {
         StringBuffer sb = new StringBuffer();
 
         sb.append(String.format("ReviveRSParamModel:  db_tableName :'%s'", db_tableName)).append("\t");
-        sb.append(String.format("token :'%s'",token)).append("\t");
+        sb.append(String.format("token :'%s'", token)).append("\t");
         sb.append(String.format("rsid :'%s'", rsid)).append("\t");
         sb.append(String.format("sql :'%s'", sql)).append("\t");
-        sb.append(String.format("db_orderBy:'%s'",db_orderBy)).append("\t");
+        sb.append(String.format("db_orderBy:'%s'", db_orderBy)).append("\t");
         sb.append(String.format("pkValue :'%s'", pkValue)).append("\t");
-        
+
         if (pkValues != null) {
             sb.append(String.format("pkValues size:'%d'", pkValues.size()));
             for (String keySet : pkValues.keySet()) {

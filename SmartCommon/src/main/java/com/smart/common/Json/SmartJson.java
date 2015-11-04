@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.smart.Json;
+package com.smart.common.Json;
 
 import com.google.gson.Gson;
 
