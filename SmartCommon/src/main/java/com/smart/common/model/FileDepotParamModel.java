@@ -14,6 +14,46 @@ import java.util.Set;
  */
 public class FileDepotParamModel {
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getRsid() {
+        return rsid;
+    }
+
+    public void setRsid(String rsid) {
+        this.rsid = rsid;
+    }
+
+    public String getOwnid() {
+        return ownid;
+    }
+
+    public void setOwnid(String ownid) {
+        this.ownid = ownid;
+    }
+
+    public Set<DepotFileDetailModel> getFileDetaile() {
+        return fileDetaile;
+    }
+
+    public void setFileDetaile(Set<DepotFileDetailModel> fileDetaile) {
+        this.fileDetaile = fileDetaile;
+    }
+
+    public int getSelectFlag() {
+        return selectFlag;
+    }
+
+    public void setSelectFlag(int selectFlag) {
+        this.selectFlag = selectFlag;
+    }
+
     public String token;//登录凭证
 
     public String rsid; //rsid

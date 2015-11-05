@@ -103,8 +103,8 @@ public class SignCommon {
     public static SignInformationModel verifySign(String token, boolean occurException) throws Exception {
         SignInformationModel tempEvm = null;
         try {
-            //TODO，需要验证去掉如下的token空判断
             if (token == null || token.isEmpty()) {
+                tempEvm = new SignInformationModel();
                 return tempEvm;
             }
 
