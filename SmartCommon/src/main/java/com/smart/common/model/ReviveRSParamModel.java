@@ -8,6 +8,7 @@ package com.smart.common.model;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -231,6 +232,8 @@ public class ReviveRSParamModel {
     public String treeNColumn;//树形节点编号列名称
     
     public List<ReviveRSParamDBLeftLinkModel> db_leftLink;// 关联从表集合
+
+    public LinkedHashMap<String, String> db_exportColumns; // 导出excel
 
     public String getInformation() {
         StringBuffer sb = new StringBuffer();

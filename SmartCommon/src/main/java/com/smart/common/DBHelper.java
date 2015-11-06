@@ -26,17 +26,15 @@ import java.util.Set;
 import java.util.UUID;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
 import snaq.db.ConnectionPool;
 
 public class DBHelper {
-    
+
     private static final int ConnectionPoolTimeout = 4000;//4s，超时时间
     private static final int GetConnectionFromPoolTimeout = 10000;//从连接池中获取链接超时时间10s，
 
     private static Map<String, ConnectionPool> mapConnectionPool = new HashMap<>();
-    
+
     public static boolean initializePool() throws Exception {
         //get systemSet    
         ConnectionPool tempCp = null;
@@ -83,11 +81,11 @@ public class DBHelper {
                 tempCp.setCaching(false);
                 mapConnectionPool.put(tempSystemSet.id, tempCp);
             }
-            
+
         }
         return true;
     }
-    
+
     public static Connection GetConnectionFromPool(String rsid) throws Exception {
         if (mapConnectionPool == null || mapConnectionPool.isEmpty()) {
             initializePool();
@@ -100,15 +98,15 @@ public class DBHelper {
         if (tempCon == null) {
             throw new Exception(String.format("Get Connection null,rsid :'%s'", rsid));
         }
-        
+
         return tempCon;
     }
-    
+
     private static Connection ConnectSybase() {
         return DBHelper.ASAConnect("sa", "123456", "192.168.169.217", "AustraliaBank", "5000");
         //return DBHelper.ASAConnect("sa", "123456",DeployInfo.GetDBAddress(),DeployInfo.GetDBname());
     }
-    
+
     public static Connection ConnectSybase(String pId) throws Exception {
         //使用 connectionPool
 //        if (pId.equals("ElectornicBank") || pId.equals("microCredit")) {
@@ -123,7 +121,7 @@ public class DBHelper {
 //        }
 //        return DBHelper.ASAConnect(setModel.dbUser, setModel.dbPwd, setModel.dbAddress, setModel.dbName, setModel.dbPort);
     }
-    
+
     public static void CloseConnection(Statement stmt, Connection connection) {
         try {
             if (stmt != null) {
@@ -145,7 +143,7 @@ public class DBHelper {
             connection = null;
         }
     }
-    
+
     public static void CloseConnection(ResultSet resultSet, Statement stmt, Connection connection) {
         try {
             if (resultSet != null) {
@@ -158,7 +156,7 @@ public class DBHelper {
             CloseConnection(stmt, connection);
         }
     }
-    
+
     private static void CloseConnection(Connection connection) {
         try {
             if (connection != null) {
@@ -169,7 +167,7 @@ public class DBHelper {
             RSLogger.ErrorLogInfo("CloseConnection connection" + e.getLocalizedMessage());
         }
     }
-    
+
     private static Connection ASAConnect(String UserID, String Password, String Machinename, String DBName, String dbPort) {
         // uses global Connection variable
 
@@ -223,9 +221,9 @@ public class DBHelper {
         TableDetailModel singlePrimary = null;
         boolean primaryColumnNoValue = true;
         try {
-            
+
             pTableInfo = FindTableInformation(paramModel.db_tableName, paramModel.rsid);
-            
+
             if (pTableInfo == null) {
                 throw new Exception(String.format("could not find table's %s information.rsid's %s", paramModel.db_tableName, paramModel.rsid));
             }
@@ -235,9 +233,9 @@ public class DBHelper {
             if (pTableInfo.identityKey != null) {
                 tempSql.append("SET NOCOUNT ON ");
             }
-            
+
             tempSql.append(" INSERT INTO ").append(paramModel.db_tableName).append("( ");
-            
+
             Iterator keys = paramModel.db_valueColumns.keySet().iterator();
             while (keys.hasNext()) {
                 String key = (String) keys.next();
@@ -246,7 +244,7 @@ public class DBHelper {
                 if (tempTableColumnDetail == null) {
                     throw new Exception("error: column detail Unknown ." + key);
                 }
-                
+
                 if (paramModel.db_valueColumns.get(key).equals("db_defaultV")) {
                     tempValue.append(" ").append("default").append(" ,");
                 } else if (tempTableColumnDetail.dataType == DataBaseTypeEnum.number || tempTableColumnDetail.dataType == DataBaseTypeEnum.decimal) {
@@ -270,12 +268,12 @@ public class DBHelper {
                 sqlResultModel.columnValue.put(singlePrimary.name, strUUIDTemp);
                 tempSql.append(tempColumn).append(singlePrimary.name).append(" ) VALUES (");
                 tempSql.append(tempValue).append("'").append(strUUIDTemp).append("'").append(")");
-                
+
             } else {
                 tempSql.append(tempColumn.substring(0, tempColumn.length() - 1)).append(" ) VALUES (");
                 tempSql.append(tempValue.substring(0, tempValue.length() - 1)).append(")");
             }
-            
+
             if (pTableInfo.identityKey != null) {
                 tempSql.append(" SELECT @@IDENTITY AS ").append(pTableInfo.identityKey.name);
             }
@@ -308,9 +306,9 @@ public class DBHelper {
         TableDetailModel tempTableColumnDetail = null;
         TableDetailModel singlePrimary = null;
         try {
-            
+
             pTableInfo = FindTableInformation(paramModel.db_tableName, paramModel.rsid);
-            
+
             if (pTableInfo == null) {
                 throw new Exception(String.format("could not find table's %s information.rsid's %s", paramModel.db_tableName, paramModel.rsid));
             }
@@ -339,7 +337,7 @@ public class DBHelper {
             sqlsb.delete(0, sqlsb.length());
             sqlsb.append(tempSql);
             sqlsb.append(" WHERE ");
-            
+
             if (paramModel.pkValue != null && !paramModel.pkValue.isEmpty()) {
                 //获取主键
                 //String tablePrimary = FindTablePrimaryKey(tableIterator); //SearchTablePrimaryKey(paramModel.db_tableName, paramModel.rsid);
@@ -353,7 +351,7 @@ public class DBHelper {
                     paramModel.pkValues = new HashMap<>();
                 }
                 paramModel.pkValues.put(singlePrimary.name, paramModel.pkValue);
-                
+
                 if (singlePrimary.dataType == DataBaseTypeEnum.number || singlePrimary.dataType == DataBaseTypeEnum.decimal) {
                     sqlsb.append(" ").append(paramModel.pkValue).append(" ");
                 } else if (singlePrimary.dataType == DataBaseTypeEnum.charset || singlePrimary.dataType == DataBaseTypeEnum.date || singlePrimary.dataType == DataBaseTypeEnum.time || singlePrimary.dataType == DataBaseTypeEnum.datetime) {
@@ -424,14 +422,14 @@ public class DBHelper {
      */
     public static String SqlDeleteFactory(ReviveRSParamModel paramModel) throws Exception {
         StringBuffer sqlSb = new StringBuffer();
-        
+
         TableInfoModel pTableInfo = null;
         TableDetailModel tempTableColumnDetail = null;
         TableDetailModel singlePrimary = null;
         try {
-            
+
             pTableInfo = FindTableInformation(paramModel.db_tableName, paramModel.rsid);
-            
+
             if (pTableInfo == null) {
                 throw new Exception(String.format("could not find table's %s information.rsid's %s", paramModel.db_tableName, paramModel.rsid));
             }
@@ -520,7 +518,7 @@ public class DBHelper {
         Set<String> columnsName = null;
         String tempSql = null, linkTerm = null;
         StringBuilder sqlsb = null;
-        
+
         TableInfoModel pTableInfo = null;
         TableDetailModel singlePrimary = null;
         try {
@@ -557,11 +555,11 @@ public class DBHelper {
             tempSql = null;
             sqlsb.append(" FROM ");
             sqlsb.append(paramModel.db_tableName);
-            
+
             linkTerm = " WHERE ";
-            
+
             if (paramModel.pkValue != null && !paramModel.pkValue.isEmpty()) {
-                
+
                 sqlsb.append(linkTerm);
                 linkTerm = " AND ";
                 //获取主键
@@ -569,7 +567,7 @@ public class DBHelper {
                 if (singlePrimary == null) {
                     throw new Exception(String.format("error: primaryKey: %s not find. tableName:%s, rsid:%s", singlePrimary.name, paramModel.db_tableName, paramModel.rsid));
                 }
-                
+
                 sqlsb.append(singlePrimary.name).append("=");
                 //colunmType = GetColumnType(tableIterator, tablePrimary);
                 if (singlePrimary.dataType == DataBaseTypeEnum.number || singlePrimary.dataType == DataBaseTypeEnum.decimal) {
@@ -605,7 +603,7 @@ public class DBHelper {
                 }
                 return sqlsb.substring(0, sqlsb.lastIndexOf("and"));
             }
-            
+
             if (paramModel.sql != null && !paramModel.sql.isEmpty()) {
                 sqlsb.append(linkTerm).append(paramModel.sql);
             }
@@ -619,16 +617,16 @@ public class DBHelper {
         } finally {
             UtileSmart.FreeObjects(tempSql, linkTerm, sqlsb, pTableInfo, singlePrimary);
         }
-        
+
     }
-    
+
     public static String SqlSelectPageFactory(ReviveRSParamModel paramModel) throws Exception {
         String linkTerm = null, tablePrimary = null;
         StringBuffer sqlsb = null;
         Set<String> columnsName = null;
         //tempTableName 在使用连接池是发现 #temp会出现重复
         String tempTableName = null;
-        
+
         TableInfoModel pTableInfo = null;
         TableDetailModel singlePrimary = null;
         try {
@@ -639,7 +637,7 @@ public class DBHelper {
 
             // temp TableName 生成： 表名秒时间随机数（99）
             tempTableName = String.format("#t_%s%s%s", paramModel.db_tableName, UtileSmart.getCurrentDateSecond(), UtileSmart.getRandomStrbySeed(99));
-            
+
             sqlsb = new StringBuffer();
             sqlsb.append("SELECT ");
             if (paramModel.db_columns != null && !paramModel.db_columns.isEmpty()) {
@@ -673,7 +671,7 @@ public class DBHelper {
             sqlsb.append(" sybid=identity(12) into ").append(tempTableName).append(" FROM ");
             sqlsb.append(paramModel.db_tableName);
             linkTerm = " WHERE ";
-            
+
             if (paramModel.sql != null && !paramModel.sql.isEmpty()) {
                 sqlsb.append(linkTerm).append(paramModel.sql);
             }
@@ -700,9 +698,9 @@ public class DBHelper {
         } finally {
             UtileSmart.FreeObjects(linkTerm, tablePrimary, sqlsb, columnsName, tempTableName, pTableInfo, singlePrimary);
         }
-        
+
     }
-    
+
     private static Set<String> getColumnsName(JSONArray JsonColunms) {
         if (JsonColunms == null || JsonColunms.isEmpty()) {
             return null;
@@ -713,7 +711,7 @@ public class DBHelper {
         }
         return columnsName;
     }
-    
+
     private static Set<String> getColumnsName(Iterator tableDetailIterator) {
         if (tableDetailIterator == null) {
             return null;
@@ -724,7 +722,7 @@ public class DBHelper {
         }
         return columnsName;
     }
-    
+
     public static String SqlSelectCountFactory(ReviveRSParamModel paramModel) throws Exception {
         StringBuffer sqlsb = null;
         String linkTerm = null;
@@ -745,7 +743,7 @@ public class DBHelper {
             linkTerm = null;
         }
     }
-    
+
     private static DataBaseTypeEnum GetColumnType(Set<TableDetailModel> tableDetails, String columnName) {
         if (tableDetails == null || tableDetails.isEmpty()) {
             return null;
@@ -755,12 +753,12 @@ public class DBHelper {
                 return GetColumnType(tableDetail.strDataType);
             }
         }
-        
+
         return null;
 
         //select * from systypes
     }
-    
+
     private static DataBaseTypeEnum GetColumnType(String pStrDataType) {
         //TODO 支持小数，和日期时间类型
         switch (pStrDataType) {
@@ -780,7 +778,7 @@ public class DBHelper {
                 return null;
         }
     }
-    
+
     private static boolean IsColumnExist(Set<TableDetailModel> tableDetails, String columnName) {
         if (tableDetails == null || tableDetails.isEmpty()) {
             return false;
@@ -937,7 +935,6 @@ public class DBHelper {
         return new ExecuteResultParam(0, "", table);
     }
 
-
     /**
      * 使用完成后，注意清理 map，避免内存泄漏 cleanMapTDString
      *
@@ -954,30 +951,30 @@ public class DBHelper {
         TableInfoModel pTableInfo = null;
         TableDetailModel singlePrimary = null;
         try {
-            
+
             pTableInfo = FindTableInformation(TableName, rsid);
-            
+
             if (pTableInfo == null) {
                 throw new Exception(String.format("ExecuteSqlSelectReturnMap could not find table's %s information.rsid's %s", TableName, rsid));
             }
-            
+
             singlePrimary = pTableInfo.getPrimariyColumn();
-            
+
             conn = DBHelper.ConnectSybase(rsid);
             stmt = conn.createStatement();
             result = stmt.executeQuery(sqlStr);
             ResultSetMetaData rsmd = result.getMetaData();
             int columnCount = rsmd.getColumnCount();
-            
+
             Map<String, String> rowMap = null;
             Map<String, Map<String, String>> map = new HashMap<>();
-            
+
             while (result.next()) {
                 rowMap = new HashMap<>();
                 for (int j = 1; j <= columnCount; j++) {
 //                    rowMap.put(rsmd.getColumnName(j), result.getString(rsmd.getColumnName(j)));
                     rowMap.put(rsmd.getColumnLabel(j), result.getString(j));
-                    
+
                 }
                 map.put(result.getString(singlePrimary.name), rowMap);
             }
@@ -988,7 +985,7 @@ public class DBHelper {
             //e.printStackTrace();
             RSLogger.ErrorLogInfo("ExecuteSqlSelectReturnMap ExecuteSqlSelect err sql:" + sqlStr + "exception.msg" + e.getLocalizedMessage(), e);
             throw new Exception("ExecuteSqlSelectReturnMap ExecuteSqlSelect err sql:" + sqlStr + "exception.msg" + e.getLocalizedMessage());
-            
+
         } finally {
             DBHelper.CloseConnection(result, stmt, conn);
         }
@@ -1029,7 +1026,7 @@ public class DBHelper {
             //e.printStackTrace();
             RSLogger.ErrorLogInfo("ExecuteSqlSelectReturnMap ExecuteSqlSelect err sql:" + sqlStr + "exception.msg" + e.getLocalizedMessage(), e);
             throw new Exception("ExecuteSqlSelectReturnMap ExecuteSqlSelect err sql:" + sqlStr + "exception.msg" + e.getLocalizedMessage());
-            
+
         } finally {
             DBHelper.CloseConnection(result, stmt, conn);
         }
@@ -1060,7 +1057,7 @@ public class DBHelper {
             resultStr = result.getString(1);
             rsmd = null;
             result.close();
-            
+
         } catch (SQLException e) {
             RSLogger.ErrorLogInfo("ExecuteSqlSelect err sql:" + sqlStr + "exception.msg" + e.getLocalizedMessage());
         } finally {
@@ -1113,7 +1110,7 @@ public class DBHelper {
         }
         return new ExecuteResultParam(0, "", table);
     }
-    
+
     public static ExecuteResultParam ExecuteSqlSelect(String rsid, String sqlStr, List<String> url_columns) throws Exception {
         RSLogger.LogInfo("executeSql : " + rsid + " sql: " + sqlStr);
         Connection conn = null;
@@ -1178,7 +1175,7 @@ public class DBHelper {
         }
         return new ExecuteResultParam(0, "", table);
     }
-    
+
     private static boolean isExistMember(List<String> strs, String member) {
         if (strs == null || strs.isEmpty()) {
             return false;
@@ -1190,7 +1187,7 @@ public class DBHelper {
         }
         return false;
     }
-    
+
     private static boolean isExistMember(Set<String> strs, String member) {
         if (strs == null || strs.isEmpty()) {
             return false;
@@ -1202,7 +1199,7 @@ public class DBHelper {
         }
         return false;
     }
-    
+
     private static TableInfoModel GetTabelInfoByLocal(Set<TableInfoModel> tableInfos, String tableId) {
         if (tableInfos == null || tableInfos.isEmpty()) {
             return null;
@@ -1238,7 +1235,7 @@ public class DBHelper {
                             tableDetail.tbId, tableDetail.name, tableDetail.dataType.toString(), tableDetail.dataLength));
                 }
             }
-            
+
             conn = DBHelper.ConnectSybase(rsid);
             stmt = conn.createStatement();
             int iRet;
@@ -1249,18 +1246,18 @@ public class DBHelper {
                 }
             }
             return new ExecuteResultParam(0, "success");
-            
+
         } catch (Exception e) {
             RSLogger.ErrorLogInfo(e.getLocalizedMessage());
             return new ExecuteResultParam(-1, e.getLocalizedMessage());
         } finally {
             DBHelper.CloseConnection(result, stmt, conn);
         }
-        
+
     }
-    
+
     private static Set<DBDetailModel> dbModel = new HashSet<>();
-    
+
     private static ExecuteResultParam loadDBInfo(String rsid) throws Exception {
         Connection conn = null;
         Statement stmt = null;
@@ -1337,7 +1334,7 @@ public class DBHelper {
 //                }
 
             }
-            
+
             result2.close();
             DBDetailModel dbDetailModel = new DBDetailModel();
             dbDetailModel.rsId = rsid;
@@ -1358,7 +1355,7 @@ public class DBHelper {
             DBHelper.CloseConnection(result, stmt, conn);
         }
     }
-    
+
     private static DBDetailModel GetRSIDModel(String rsid) throws Exception {
         // LoadDBInfo();
         for (DBDetailModel next : dbModel) {
@@ -1368,7 +1365,7 @@ public class DBHelper {
         }
         return null;
     }
-    
+
     public static boolean LoadDBInfo() throws Exception {
         if (dbModel != null) {
             for (DBDetailModel dbModel1 : dbModel) {
@@ -1418,7 +1415,7 @@ public class DBHelper {
             + "'indexName' = name\n"
             + "from sysindexes sc where  (sc.status & 64) = 0 \n"
             + "order by sc.id";
-    
+
     private static final String SearchTablePrimaryKeyStrByUserTable = "select 'tableName' = object_name(sc.id),\n"
             + "'columnName' = index_col(object_name(sc.id),sc.indid,1),\n"
             + "'indexDescription' = convert(varchar(210), case when (sc.status & 16)<>0 then 'clustered' else 'nonclustered' end\n"

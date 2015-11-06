@@ -211,7 +211,7 @@ public class DeployInfo {
         return null;
     }
 
-    private static String GetHttpPath() throws Exception {
+    public static String GetHttpPath() throws Exception {
         if (HttpPath_Str == null || HttpPath_Str.isEmpty()) {
             //readSetUp();
             throw new Exception("have't load deployInfo.");
@@ -240,6 +240,8 @@ public class DeployInfo {
         DeployFilePath = sb.append(DeployRootPath).append("FileDepot").toString();// DeployRootPath + "FileDepot";
         sb.delete(0, sb.length());
         DeployLogPath = sb.append(DeployRootPath).append("Log").toString();//DeployRootPath + "Log";
+        sb.delete(0, sb.length());
+        DeployTempFilePath = sb.append(DeployRootPath).append("TempFile").toString();//DeployRootPath + "TempFile";
         sb.delete(0, sb.length());
         sb = null;
         return DeployRootPath;
@@ -278,6 +280,15 @@ public class DeployInfo {
             throw new Exception("have't load DeployHttpFilePath.");
         }
         return DeployHttpFilePath;
+    }
+
+    public static String DeployTempFilePath = null;
+
+    public static String GetDeployTempFilePath() throws Exception {
+        if (DeployTempFilePath == null || DeployTempFilePath.isEmpty()) {
+            throw new Exception("have't load DeployHttpFilePath.");
+        }
+        return DeployTempFilePath;
     }
 
 	// rootPath+= File.separator+"webapps";
