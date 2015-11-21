@@ -5,7 +5,6 @@
  */
 package com.smart.smartscommon.util;
 
-import java.util.Iterator;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import java.util.Map;
