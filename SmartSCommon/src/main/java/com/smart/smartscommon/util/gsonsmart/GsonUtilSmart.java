@@ -19,6 +19,7 @@ public class GsonUtilSmart {
     public static Gson GsonBuild() {
         return new GsonBuilder()
                 .serializeNulls()
+                .setPrettyPrinting()
                 .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.FINAL)
                 //                .excludeFieldsWithoutExposeAnnotation()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -27,6 +28,7 @@ public class GsonUtilSmart {
     
     public static Gson GsonBuild(ExclusionStrategy exclude) {
         return new GsonBuilder()
+                .setPrettyPrinting()
                 .serializeNulls()
                 .setExclusionStrategies(exclude)
                 .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.FINAL)

@@ -238,7 +238,7 @@ public class UtileSmart {
     }
 
     public static String getUUID() {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().replace("-", "");
     }
 
     /**
